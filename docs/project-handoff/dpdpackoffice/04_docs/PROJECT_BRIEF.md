@@ -1,83 +1,88 @@
-# PROJECT BRIEF — DPD Pack Office
+# PROJECT BRIEF — jeden moduł nadań DPD
 
 ## Cel
 
-Zbudować moduł PrestaShop 9 zapewniający osobny panel Back Office do obsługi już utworzonych przesyłek DPD, etykiet, wydruków, statusów, błędów i historii operacji.
+Zbudować jeden moduł PrestaShop do obsługi nadań DPD w Back Office. Moduł ma łączyć kolejkę zamówień do nadania, formularz nadania, multi-paczki, COD, druk etykiet, historię, błędy danych, szablony paczek, reguły produktów i diagnostykę.
 
-## Główne role modułów
+## Decyzja nadrzędna
 
-### `dpdshipmvp`
-Odpowiada za:
+Nie budujemy trzech osobnych modułów.
 
-- utworzenie przesyłki,
-- komunikację z API DPD,
-- zapis FID,
-- pobranie numeru listu,
-- pobranie etykiety,
-- operacje ręczne na stronie zamówienia.
+Nazwy `dpdshipmvp`, `dpdpackoffice` i `orderpanelmvp` można traktować wyłącznie jako obszary logiczne jednego modułu:
 
-### `dpdpackoffice`
-Odpowiada za:
+- obszar nadania paczki,
+- obszar wydruku i etykiet,
+- obszar kolejki zamówień i pakowania.
 
-- listę już utworzonych przesyłek,
-- wydruki pojedyncze i zbiorcze,
-- kontrolę statusów,
-- historię,
-- diagnostykę,
-- ostrzeżenia przed powtórnym drukiem i nadaniem.
+W kodzie oraz dokumentacji docelowo należy myśleć o jednym module nadań DPD.
 
-### `orderpanelmvp`
-Odpowiada za:
+## Zasada krytyczna API DPD
 
-- listę zamówień do kompletacji i pakowania,
-- nie komunikuje się bezpośrednio z API DPD.
+Podstawa modułu zostanie dodana później. W tej podstawie istnieje gotowe połączenie z API DPD.
+
+Nie przebudowujemy tej integracji. Nie tworzymy drugiego klienta API. Nowe funkcje mają korzystać z istniejącego silnika API DPD, gdy zostanie dodany do repozytorium.
 
 ## Zakres v1
 
 - osobna zakładka Back Office,
-- tabela przesyłek,
-- wyszukiwanie i filtrowanie,
-- status przesyłki,
-- numer listu,
-- FID,
-- liczba paczek,
-- waga każdej paczki,
-- ręczne korekty wagi,
-- minimalna waga 1 kg,
-- COD TAK/NIE,
+- Dashboard,
+- Do nadania,
+- Do wydruku,
+- Nadane dzisiaj,
+- Błędy danych,
+- Historia,
+- Szablony paczek,
+- Reguły produktów,
+- Ustawienia,
+- Diagnostyka,
+- tabela zamówień i przesyłek,
+- formularz nadania paczki,
+- obsługa COD,
+- obsługa wielu paczek do jednego zamówienia,
+- FID i numer listu,
 - status etykiety,
 - wydruk pojedynczy,
 - wydruk zbiorczy A6 i A4,
 - wariant z listą produktów,
 - historia operacji,
-- diagnostyka,
 - ostrzeżenia przed ponownym drukiem,
-- blokada niebezpiecznych operacji.
+- blokada ponownego nadania,
+- walidacja danych.
 
 ## Poza zakresem v1
 
-- modyfikacja core PrestaShop,
-- override core,
+- osobne moduły `dpdshipmvp`, `dpdpackoffice`, `orderpanelmvp`,
+- integracja z innymi kurierami,
+- automatyczne nadawanie bez kliknięcia operatora,
+- przebudowa API DPD,
 - zmiana checkout,
-- tworzenie przewoźnika,
-- automatyczne wywołanie API przy otwarciu panelu,
-- automatyczne nadanie bez jawnej akcji operatora,
-- przechowywanie tokenów i haseł w logach,
-- pełny terminal drukarki lokalnej bez osobnego projektu.
+- modyfikacja core PrestaShop,
+- pełny system magazynowy,
+- aplikacja mobilna,
+- terminal drukarki lokalnej,
+- analiza kosztów i dopłat,
+- porównanie z fakturami DPD,
+- pełna synchronizacja statusów w tle.
+
+## Aktualny etap
+
+Aktualny etap to modelowanie przedsięwzięcia, funkcji, workflow i makiety. Jeszcze nie kodujemy finalnego API. Najpierw ustalamy, jak moduł ma działać, co jest potrzebne, czego brakuje w makiecie i co jest zbędne.
 
 ## Wymagania techniczne
 
 - PrestaShop 9.x,
 - PHP zgodny ze środowiskiem sklepu,
-- Symfony services tam, gdzie uzasadnione,
-- osobne tabele modułu,
 - kontrolery Back Office,
 - tokeny, uprawnienia i CSRF,
-- walidacja wszystkich danych wejściowych,
+- walidacja danych wejściowych,
 - brak modyfikacji core,
-- minimalny zakres zmian.
+- minimalny zakres zmian,
+- brak sekretów w logach.
 
 ## Źródło UX
 
 Makieta:
 `02_mockup/dpdpackoffice-makieta-v4.html`
+
+Pełne wytyczne:
+`README.md` oraz `docs/PROJECT_SUMMARY_4800.md`.
